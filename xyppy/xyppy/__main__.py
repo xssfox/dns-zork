@@ -67,7 +67,7 @@ records = {
 games = {}
 
 def dns_response(data):
-    try:
+#    try:
         request = DNSRecord.parse(data)
 
         print(request)
@@ -77,8 +77,11 @@ def dns_response(data):
         qname = request.q.qname
         qn = str(qname)
         qtype = request.q.qtype
+        print(qtype)
         qt = QTYPE[qtype]
-        if qtype == TXT:
+        print("test2")
+        if 1 == 1:
+            print("test3")
             subdomains = str(qname).split(".")
             command = subdomains[0].replace("-", " ")
             if len(subdomains) == 5:
@@ -108,8 +111,8 @@ def dns_response(data):
         print("---- Reply:\n", reply)
 
         return reply.pack()
-    except:
-        pass
+#    except:
+#        pass
 
 class BaseRequestHandler(socketserver.BaseRequestHandler):
 
@@ -561,7 +564,7 @@ class dns_term():
 class test():
     def __init__(self):
 
-        with open("ZORK1.DAT", 'rb') as f:
+        with open("/home/ubuntu/ZORK1.DAT", 'rb') as f:
             mem = f.read()
 
         if blorb.is_blorb(mem):
@@ -573,7 +576,7 @@ class test():
         ops.setup_opcodes(self.env)
     def next_step(self, command):
         self.env.command = command
-        for x in range(0,10000):
+        for x in range(0,20000):
             try:
                 step(self.env)
             except ValueError:
@@ -626,8 +629,8 @@ if __name__ == '__main__':
     
 
     servers = []
-    servers.append(socketserver.ThreadingUDPServer(('', 54), UDPRequestHandler))
-    servers.append(socketserver.ThreadingTCPServer(('', 54), TCPRequestHandler))
+    servers.append(socketserver.ThreadingUDPServer(('', 53), UDPRequestHandler))
+    servers.append(socketserver.ThreadingTCPServer(('', 53), TCPRequestHandler))
 
     for s in servers:
         thread = threading.Thread(target=s.serve_forever)  # that thread will start one more thread for each request
@@ -646,4 +649,3 @@ if __name__ == '__main__':
     finally:
         for s in servers:
             s.shutdown()
-
